@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - 16
+script:
+  - npm run build
+  - echo "Commit sha - $TRAVIS_COMMIT"
+  - mkdir -p dist/@femiarks/page-2/$TRAVIS_COMMIT
+  - mv dist/*.* dist/@femiarks/page-2/$TRAVIS_COMMIT/
+deploy:
+  provider: s3
+  access_key_id: '$AWS_ACCESS_KEY_ID'
+  secret_access_key: '$AWS_SECRET_ACCESS_KEY'
+  bucket: 'single-spa-demo-femiarkh'
+  region: 'eu-west-1'
+  cache-control: 'max-age=31536001'
+  acl: 'public_read'
+  local_dir: dist
+  skip_cleanup: true
+  on:
+    branch: main
